@@ -3,6 +3,8 @@
 
 void FizzBuzz(int n); // <- declaration (so compiler stops complaining)
 
+int compare(const void *A, const void *B);
+
 int main() {
   // arr length (must declare explicitly)
   // PERSONAL NOTE: cannot use sizeof(arr)/sizeof(type) since sizeof() only 
@@ -33,6 +35,18 @@ int main() {
     printf("\n");
   }
 
+  /* q-sort portion */
+
+  qsort(arr, n, sizeof(arr[0]), compare);
+
+  printf("Sorted array:\n");
+  for (int i = 0; i < n; i++) {
+    printf("%d\n", arr[i]);
+  }
+
+  // free my boi
+  free(arr);
+
   return 0;
 }
 
@@ -43,4 +57,16 @@ void FizzBuzz(int n) {
   if (n % 5 == 0) {
     printf("Buzz");
   }
+}
+
+int compare(const void *A, const void *B) {
+  // cast to integers b/c compare has to be const void *A as params for some
+  // reason
+  int *a = A;
+  int *b = B;
+
+  // # > 0 if A < B (2nd bigger than 1st)
+  // # < 0 if A > B (1st bigger than 2nd)
+  // # = 0 if A = B
+  return *b - *a;
 }
