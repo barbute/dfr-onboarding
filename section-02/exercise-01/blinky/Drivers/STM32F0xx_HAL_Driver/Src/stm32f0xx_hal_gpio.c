@@ -410,14 +410,17 @@ GPIO_PinState HAL_GPIO_ReadPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin) {
  */
 void HAL_GPIO_WritePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin,
                        GPIO_PinState PinState) {
-  /* Check the parameters */
-  assert_param(IS_GPIO_PIN(GPIO_Pin));
-  assert_param(IS_GPIO_PIN_ACTION(PinState));
-
-  if (PinState != GPIO_PIN_RESET) {
-    GPIOx->BSRR = (uint32_t)GPIO_Pin;
+  /* 
+   * !!!
+   * SEC-02/EX-01 WRITE OWN DEFINITION HERE OR IN OTHER FILE 
+   * !!!
+   */
+  // I have a lot of notes about this, see the README in this blinky project's 
+  // directory. 
+  if (PinState == GPIO_PIN_SET) {
+    GPIOx->BSRR = GPIO_Pin;
   } else {
-    GPIOx->BRR = (uint32_t)GPIO_Pin;
+    GPIOx->BRR = GPIO_Pin;
   }
 }
 
@@ -429,16 +432,12 @@ void HAL_GPIO_WritePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin,
  * @retval None
  */
 void HAL_GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin) {
-  uint32_t odr;
-
-  /* Check the parameters */
-  assert_param(IS_GPIO_PIN(GPIO_Pin));
-
-  /* get current Output Data Register value */
-  odr = GPIOx->ODR;
-
-  /* Set selected pins that were at low level, and reset ones that were high */
-  GPIOx->BSRR = ((odr & GPIO_Pin) << GPIO_NUMBER) | (~odr & GPIO_Pin);
+  /* 
+   * !!!
+   * SEC-02/EX-01 WRITE OWN DEFINITION HERE OR IN OTHER FILE 
+   * !!!
+   */
+   assert_param(IS_GPIO_PIN(GPIO_Pin));
 }
 
 /**
