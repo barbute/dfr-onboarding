@@ -437,7 +437,13 @@ void HAL_GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin) {
    * SEC-02/EX-01 WRITE OWN DEFINITION HERE OR IN OTHER FILE 
    * !!!
    */
-   assert_param(IS_GPIO_PIN(GPIO_Pin));
+   GPIO_PinState cur_state = HAL_GPIO_ReadPin(GPIOx, GPIO_Pin);
+
+   if (cur_state == GPIO_PIN_SET) {
+    HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_RESET);
+   } else {
+    HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_SET);
+   }
 }
 
 /**
