@@ -24,3 +24,9 @@ At first this code may not make any sense. We are setting the `BSRR` register to
 Recall that at the hardware level, GPIO pins are mapped to some address represented in binary (e.g. `GPIO_Pin_5` may mapped to `0x05`). `BSRR` is a special GPIO register on the STM32; when we write the GPIO pin's address to it, we are telling the hardware to operate on that specific pin. `BSRR` will then go ahead and write a digital high signal to specified pin (`PIN_SET`). However if we want to reset the pin we must instead use the `BRR` register as that will trigger a write-digital-low operation to the specified pin that it is set to.
 
 I could also be making all of this stuff up b/c yeah ts is hard but I think this is what is happening on the STM at a high level.
+
+---
+
+for sec-02/ex-03 I had to follow [this tutorial](https://wiki.st.com/stm32mcu/wiki/Getting_started_with_EXTI). Note that after creating the project for the board in STM32CubeMX, to set the correct build system (the default is EWARM for whatever reason, use Make or CMake since that's what we've set up).
+
+After setting the pin configurations I then opened the project in the STM32CubeIDE and pasted in the `GPIO_EXTI` callback function. I then built and deployed the code from the IDE. Pressing the blue button turns the green LED on, and reset turns it off.
