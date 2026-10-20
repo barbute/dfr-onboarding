@@ -40,3 +40,13 @@ After setting the pin configurations I then opened the project in the STM32CubeI
 Followed [this tutorial](https://community.st.com/stm32-mcus-60/how-to-use-register-callbacks-in-stm32-119508).
 
 > NOTE I was unable to set the `HCLK` frequency to $250$ MHz as specified in the tutorial. I left it at $48$ MHz as that was the max that CubeMX would let me set it to. I have not yet made any other major changes to the tutorial's instructions.
+
+I followed the tutorial to the best of my abilities, and in the end, the program mostly worked. There were some problems however, namely the fact that the board I am using primarily supports [USART](https://en.wikipedia.org/wiki/Universal_synchronous_and_asynchronous_receiver-transmitter) (which is like [UART](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter) but also supports synchronous communication). STMCubeMX would only let me configure my pins to be USART, meaning that every function definition and parameter that involved UART in the tutorial had to be changed to USART. Additionally the Register CallBack (found under Project Manager > Advanaced Settings > Register CallBack Panel) for USART was not enabled as I had only set it to UART. I had to fix this by going to [`exercise-03-dfr-onboarding-clbk/Core/Inc/stm32f0xx_hal_conf.h`](exercise-03-dfr-onboarding-clbk/Core/Inc/stm32f0xx_hal_conf.h) and defining `USE_HAL_USART_REGISTER_CALLBACKS` to be `1U` (instead of regenerating the entire program again).
+
+I actually found this experience to be moderately enlightening, as I now see that CubeMX is basiaclly a GUI wrapper for configuring your board. All of the include definitions are based on some variables set in this config file (IE the program only includes certain HAL files if enabled in CubeMX when generating the code). I do think the bloat is kinda of annoying, as in including all of these unnecessary files with each project is a bit of a waste, but it's useful if you want to enable certain functionality late.
+
+Anyways I'm going to go eat dinner now.
+
+# sec-02/ex-04
+
+i'm doing this late b/c i'm on mac rn
