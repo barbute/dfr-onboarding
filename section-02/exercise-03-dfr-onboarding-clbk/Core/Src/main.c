@@ -21,10 +21,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+// #include "stm32f0xx_hal_conf.h"
 /* USER CODE END Includes */
 
-/* Private typedef -----------------------------------------------------------*/
+/* Private typedef -----------------`------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
 /* USER CODE END PTD */
@@ -45,7 +45,11 @@ TIM_HandleTypeDef htim1;
 USART_HandleTypeDef husart2;
 
 /* USER CODE BEGIN PV */
+GPIO_TypeDef* USER_LED_Port = GPIOA;
+uint16_t USER_LED_Pin = GPIO_PIN_5;
 
+uint8_t message[16] = "Period Elapsed\n\r";
+FlagStatus periodElapsed = RESET;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -54,7 +58,8 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_Init(void);
 static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
-
+void User_UsartCompleteCallback(USART_HandleTypeDef *husart);
+void User_TIMPeriodElapsedCallback(TIM_HandleTypeDef *htim);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -94,13 +99,19 @@ int main(void)
   MX_USART2_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_USART_RegisterCallback(&husart2, HAL_USART_TX_COMPLETE_CB_ID, User_UsartCompleteCallback);
+  HAL_TIM_RegisterCallback(&htim1, HAL_TIM_PERIOD_ELAPSED_CB_ID, User_TIMPeriodElapsedCallback);
+  HAL_TIM_Base_Start_IT(&htim1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    if (periodElapsed == SET) {
+      HAL_USART_Transmit_IT(&husart2, message, sizeof(message));
+      periodElapsed = RESET;
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -265,7 +276,13 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void User_UsartCompleteCallback(USART_HandleTypeDef *hsuart) {
+  HAL_GPIO_TogglePin(USER_LED_Port, USER_LED_Pin);
+}
 
+void User_TIMPeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+  periodElapsed = SET;
+}
 /* USER CODE END 4 */
 
 /**
