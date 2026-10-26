@@ -43,7 +43,7 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-bool LED_state = false;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -97,14 +97,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // idk why but for some reason SET means the button is not being pushed and 
-    // RESET means that it is being pushed
-    if (HAL_GPIO_ReadPin(BLUE_PB_GPIO_Port, BLUE_PB_Pin) == GPIO_PIN_RESET) {
-      // LED_state = !LED_state;
-      HAL_GPIO_WritePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin, GPIO_PIN_SET);
-    } else {
-      HAL_GPIO_WritePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin, GPIO_PIN_RESET);
-    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -205,11 +197,11 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : BLUE_PB_Pin */
-  GPIO_InitStruct.Pin = BLUE_PB_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pin : BLUE_PB_EXTI_Pin */
+  GPIO_InitStruct.Pin = BLUE_PB_EXTI_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(BLUE_PB_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(BLUE_PB_EXTI_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : GREEN_LED_Pin */
   GPIO_InitStruct.Pin = GREEN_LED_Pin;

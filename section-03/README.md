@@ -1,6 +1,6 @@
 > Decided to keep all the code for this section in a single project directory since regen-ing projects is genuinely blowing up my blob sizes lmao
 
-# sec-02/ex-01 - Custom HAL GPIO implementations
+# sec-03/ex-01 - Poll button to turn on LED
 
 Fairly simple exercise. I was sort of being dumb at first though as I had forgot that `main.h` contains the defines for the pins that I renamed in CubeMX:
 
@@ -40,3 +40,6 @@ Afterwards it was trivial to write the code that satisfies the exercise:
   }
   /* USER CODE END 3 */
 ```
+# sec-03/ex-02 - Use button interrupt to turn on LED
+
+e
