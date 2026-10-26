@@ -1,4 +1,4 @@
-# sec-02/ex-03 - Custom HAL GPIO implementations
+# sec-02/ex-01 - Custom HAL GPIO implementations
 
 for sec-02/ex-01 John said to only do the last two:
 
