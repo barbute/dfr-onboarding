@@ -43,7 +43,7 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+GPIO_PinState LED_state = GPIO_PIN_RESET;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -210,13 +210,30 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GREEN_LED_GPIO_Port, &GPIO_InitStruct);
 
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
+
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+  if (GPIO_Pin == BLUE_PB_EXTI_Pin) {
+    if (LED_state == GPIO_PIN_SET) {
+      LED_state = GPIO_PIN_RESET;
+    } else {
+      LED_state = GPIO_PIN_SET;
+    }
+    HAL_GPIO_WritePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin, LED_state);
+  } else {
+    // why is a no-op necessary if we don't want to run anything when an 
+    // interrupt we don't care about is fired?
+    __NOP();
+  }
+}
 /* USER CODE END 4 */
 
 /**
